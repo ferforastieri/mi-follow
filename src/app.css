@@ -1,13 +1,111 @@
-/* Mi Follow: the kit's tokens, one page, a few app-only pieces. */
+/*
+ * Mi Follow — a blush-plum identity laid over the kit's tokens. Everything the
+ * kit draws (cards, buttons, tables, tabs, the pixel sky) reads these values,
+ * so the whole page takes the palette without restyling a single component.
+ */
 
-:root {
-  /* The kit ships Onest; this app reads in Source Sans 3, as faang's own site does. */
+:root,
+[data-theme="light"] {
+  /* Surfaces: warm paper, white cards. */
+  --bg: #fbf6f4;
+  --raised: #ffffff;
+  --raised-2: #fffdfc;
+  --sunken: #f6ebe7;
+  --side: #fdf3f0;
+  --pane: #ffffff;
+  --side-hover: color-mix(in srgb, var(--ink) 5%, var(--side));
+  --side-chosen: color-mix(in srgb, var(--ink) 10%, var(--side));
+  --line: rgba(74, 27, 43, 0.075);
+  --line2: rgba(74, 27, 43, 0.13);
+  --line-strong: #8b7280;
+
+  /* Ink: near-black with a plum cast, never pure gray. */
+  --ink: #2b1620;
+  --ink2: #3b2230;
+  --ink-muted: #6a4f5c;
+  --muted: #6b515d;
+  --faint: #8d7381;
+
+  /* The rose that means "this product". */
+  --agent: #b23a66;
+  --agent2: #e78aa9;
+  --agent-soft: #fce9f0;
+  --on-agent: #ffffff;
+
+  --ok: #2c7a55;
+  --warn: #9a5b00;
+  --warn-soft: #fbeed5;
+  --on-warn: #ffffff;
+  --danger: #b3263f;
+  --info: #0a6f9e;
+
+  --plate: rgba(120, 60, 85, 0.09);
+  --plate-soft: rgba(120, 60, 85, 0.055);
+  --glass: rgba(255, 255, 255, 0.86);
+  --glass-solid: #fdf8f6;
+  --chosen-bg: var(--sunken);
+  --empty-surface: var(--bg);
+
+  --e1: 0 1px 1px rgba(74, 27, 43, 0.04), 0 2px 4px -1px rgba(74, 27, 43, 0.06), 0 0 0 1px var(--line);
+  --e2: 0 1px 1px rgba(74, 27, 43, 0.05), 0 6px 16px -4px rgba(74, 27, 43, 0.12), 0 0 0 1px var(--line);
+  --e3: 0 2px 4px rgba(74, 27, 43, 0.05), 0 26px 60px -18px rgba(74, 27, 43, 0.32), 0 0 0 1px var(--line2);
+  --top: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --scrim: rgba(28, 10, 18, 0.34);
+  --focus-color: #b23a66;
+
+  /* The app's faces and measures. */
   --font-sans: "Source Sans 3 Variable", "Source Sans 3", "Segoe UI", system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, Menlo, monospace;
   --font-display: var(--font-sans);
   --font-size-adjust: 0.52;
-  --mf-max: 1120px;
+  --mf-max: 1080px;
   --mf-pad: clamp(18px, 4vw, 36px);
+}
+
+[data-theme="dark"] {
+  --bg: #150f13;
+  --raised: #201820;
+  --raised-2: #291f27;
+  --sunken: #0f0a0d;
+  --side: #180f15;
+  --pane: #201820;
+  --side-hover: color-mix(in srgb, var(--ink) 6%, var(--side));
+  --side-chosen: color-mix(in srgb, var(--ink) 12%, var(--side));
+  --line: rgba(255, 214, 231, 0.09);
+  --line2: rgba(255, 214, 231, 0.15);
+  --line-strong: #7d6572;
+
+  --ink: #f8edf2;
+  --ink2: #ead9e2;
+  --ink-muted: #c9aebc;
+  --muted: #c3a8b6;
+  --faint: #a1899a;
+
+  --agent: #f58ab0;
+  --agent2: #ffb6cd;
+  --agent-soft: rgba(245, 138, 176, 0.14);
+  --on-agent: #2a0b16;
+
+  --ok: #57c88f;
+  --warn: #e2a33a;
+  --warn-soft: rgba(226, 163, 58, 0.16);
+  --on-warn: #2a1a00;
+  --danger: #ff7d8e;
+  --info: #6cb8e0;
+
+  --plate: rgba(255, 214, 231, 0.08);
+  --plate-soft: rgba(255, 214, 231, 0.05);
+  --glass: rgba(28, 20, 26, 0.84);
+  --glass-solid: #1c141a;
+  --chosen-bg: var(--sunken);
+  --empty-surface: var(--bg);
+
+  --e1: 0 1px 1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--line);
+  --e2: 0 1px 1px rgba(0, 0, 0, 0.4), 0 6px 16px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--line);
+  --e3: 0 2px 4px rgba(0, 0, 0, 0.4), 0 26px 60px -18px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--line2);
+  --top: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --scrim: rgba(0, 0, 0, 0.6);
+  --focus-color: #f58ab0;
 }
 
 *,
@@ -50,101 +148,169 @@ a {
 .mf__bar {
   position: sticky;
   top: 0;
-  z-index: var(--z-sticky, 1);
+  z-index: 10;
   display: flex;
+  height: 58px;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 10px var(--mf-pad);
+  padding: 0 var(--mf-pad);
   border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg) 86%, transparent);
-  backdrop-filter: blur(12px);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(14px) saturate(1.15);
 }
 
 .mf__brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  color: var(--ink);
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.022em;
+  border-radius: var(--radius-sm);
   text-decoration: none;
 }
 
-.mf__mark {
-  display: grid;
-  width: 26px;
-  height: 26px;
+.mf-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mf-mark {
+  display: inline-grid;
   place-items: center;
-  border-radius: 7px;
-  background: var(--agent);
+  border-radius: 9px;
+  background: linear-gradient(145deg, var(--agent2), var(--agent));
   color: var(--on-agent);
-  font-family: var(--font-mono);
-  font-size: 10px;
+  box-shadow:
+    0 2px 10px -2px color-mix(in srgb, var(--agent) 60%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: transform var(--dur-base) var(--spring);
+}
+
+.mf__brand:hover .mf-mark {
+  transform: rotate(-6deg) scale(1.05);
+}
+
+.mf-mark__light {
+  fill: #fff;
+  opacity: 0.55;
+}
+
+.mf-logo__word {
+  color: var(--ink);
+  font-size: 17px;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.03em;
+}
+
+.mf-logo__mi {
+  color: var(--muted);
+  font-weight: 400;
 }
 
 .mf__main {
-  display: flex;
   width: 100%;
   max-width: var(--mf-max);
   flex: 1;
-  flex-direction: column;
-  gap: 22px;
   margin: 0 auto;
-  padding: clamp(18px, 4vw, 40px) var(--mf-pad) 64px;
+  padding: 0 var(--mf-pad) clamp(40px, 6vw, 64px);
 }
 
-.mf__foot {
-  display: flex;
-  max-width: var(--mf-max);
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 8px 24px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 18px var(--mf-pad) 28px;
-  border-top: 1px solid var(--line);
-  color: var(--faint);
-  font-size: 12.5px;
-}
-
-/* Hero */
+/* Hero: the pitch, then the uploader itself — the first thing you can do. */
 
 .mf-hero {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: clamp(18px, 3vw, 26px);
+  padding: clamp(30px, 6vw, 64px) 0 clamp(6px, 2vw, 14px);
+  text-align: center;
+}
+
+/* A warm halo behind the hero: the palette's light, no image, no pixels. */
+.mf-hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -90px;
+  left: 50%;
+  width: min(900px, 120%);
+  height: 520px;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    46% 44% at 50% 34%,
+    color-mix(in srgb, var(--agent2) 30%, transparent),
+    transparent 72%
+  );
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.mf-hero__text {
+  display: flex;
+  max-width: 760px;
+  flex-direction: column;
+  align-items: center;
   gap: 14px;
-  padding: clamp(10px, 3vw, 28px) 0 4px;
 }
 
 .mf-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   margin: 0;
   color: var(--faint);
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  animation: ac-fade-in var(--dur-panel) var(--out) both;
 }
 
-.mf-title {
+.mf-kicker__dot {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--agent);
+}
+
+.mf-kicker__dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 1px solid var(--agent);
+  border-radius: 50%;
+  animation: ac-halo 2.6s var(--out) infinite;
+}
+
+.mf-hero__title {
   margin: 0;
   color: var(--ink);
-  font-size: clamp(38px, 7vw, 62px);
+  font-size: clamp(38px, 7.2vw, 70px);
   font-weight: 640;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
   line-height: 0.98;
+  text-wrap: balance;
+  animation: ac-rise 0.5s var(--spring) both;
+  animation-delay: 0.06s;
+}
+
+.mf-hero__accent {
+  background: linear-gradient(100deg, var(--agent2) 8%, var(--agent) 72%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .mf-lead {
-  max-width: 64ch;
+  max-width: 56ch;
   margin: 0;
   color: var(--muted);
   font-size: 16.5px;
   line-height: 1.55;
+  text-wrap: pretty;
+  animation: ac-rise 0.5s var(--out) both;
+  animation-delay: 0.12s;
 }
 
 .mf-lead strong {
@@ -152,54 +318,95 @@ a {
   font-weight: 600;
 }
 
-/* Layout */
+/* The dock: the uploader as the hero's main action, framed by a rose hairline. */
 
-.mf-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
-  gap: 14px;
-  align-items: stretch;
+.mf-dock {
+  position: relative;
+  width: min(660px, 100%);
+  padding: 14px;
+  border-radius: var(--radius-section);
+  background: var(--raised);
+  box-shadow: var(--e3);
+  text-align: start;
+  animation: ac-rise 0.55s var(--spring) both;
+  animation-delay: 0.18s;
 }
 
-/* Two balanced columns of cards: the one on the left starts the task, the one on
-   the right explains it. Under 900px both become a single column. */
-.mf-cols {
-  display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
-  gap: 14px;
-  align-items: start;
+.mf-dock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    140deg,
+    color-mix(in srgb, var(--agent2) 75%, transparent),
+    transparent 38%,
+    transparent 62%,
+    color-mix(in srgb, var(--agent) 45%, transparent)
+  );
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
-.mf-col {
+.mf-dock .ac-upload__zone {
   display: flex;
-  min-width: 0;
+  min-height: 152px;
   flex-direction: column;
-  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1.5px dashed var(--line2);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--agent-soft) 45%, var(--raised));
+  transition:
+    border-color var(--dur-fast) var(--out),
+    background-color var(--dur-fast) var(--out),
+    transform var(--dur-base) var(--spring);
 }
 
-.mf-grid--tight {
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+.mf-dock .ac-upload__zone:hover {
+  border-color: color-mix(in srgb, var(--agent) 55%, var(--line2));
+  background: color-mix(in srgb, var(--agent-soft) 75%, var(--raised));
 }
 
-@media (max-width: 860px) {
-  .mf-grid,
-  .mf-cols {
-    grid-template-columns: minmax(0, 1fr);
-  }
+.mf-dock .ac-upload__zone--over {
+  border-color: var(--agent);
+  background: var(--agent-soft);
+  transform: scale(1.006);
 }
 
-.mf-grid .ac-card {
-  min-width: 0;
+.mf-dock .ac-upload__label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
 }
 
-/* The uploader card stacks its pieces without the kit's own gaps. */
-.mf .ac-upload {
-  margin-top: 4px;
+.mf-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 18px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--faint);
+  font-size: 12.5px;
+}
+
+.mf-trust li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .mf-status {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   margin: 12px 0 0;
   color: var(--muted);
@@ -213,49 +420,113 @@ a {
   font-size: 13.5px;
 }
 
-/* How-to */
+.mf-dock .ac-alert {
+  margin-top: 12px;
+}
 
-.mf-steps {
+/* The three steps, as compact cards. */
+
+.mf-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin: 6px 0 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: step;
+  gap: 14px;
+  padding-top: clamp(26px, 5vw, 46px);
 }
 
-.mf-steps li {
-  display: grid;
-  grid-template-columns: 24px minmax(0, 1fr);
-  gap: 10px;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.5;
-  counter-increment: step;
-}
-
-.mf-steps li::before {
-  content: counter(step);
-  display: grid;
-  width: 24px;
-  height: 24px;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--plate);
-  color: var(--ink);
+.mf-h2 {
+  margin: 0;
+  color: var(--faint);
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
-.mf-steps strong {
+.mf-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mf-step {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--raised);
+  box-shadow: var(--e1);
+  animation: ac-rise 0.4s var(--out) both;
+  animation-delay: calc(0.07s * var(--i, 0));
+}
+
+.mf-step__n {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--agent-soft);
+  color: var(--agent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mf-step__title {
+  margin: 2px 0 4px;
+  color: var(--ink);
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.mf-step__body {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.mf-step__body strong {
   color: var(--ink);
   font-weight: 600;
 }
 
-.mf-steps li > span {
+.mf-step__body em {
+  color: var(--ink);
+  font-style: italic;
+}
+
+/* Layout */
+
+.mf-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px;
+  padding-top: 14px;
+}
+
+.mf-col {
+  display: flex;
   min-width: 0;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mf-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.mf-grid--tight {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .mf-checks {
@@ -275,32 +546,59 @@ a {
 }
 
 .mf-checks li::before {
-  content: "✓";
-  color: var(--ok);
-  font-weight: 700;
+  content: "♥";
+  color: var(--agent);
+  font-size: 12px;
+  line-height: 1.6;
 }
 
-/* Stats */
+.mf-prose {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* Report */
+
+.mf-report {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: clamp(18px, 3vw, 30px);
+  animation: ac-fade-in var(--dur-panel) var(--out) both;
+}
+
+.mf-report__head {
+  position: relative;
+}
+
+.mf-report__head::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -70px;
+  left: -12%;
+  width: 70%;
+  height: 240px;
+  background: radial-gradient(50% 60% at 30% 20%, color-mix(in srgb, var(--agent2) 20%, transparent), transparent 72%);
+  pointer-events: none;
+}
+
+.mf-accent-text {
+  background: linear-gradient(100deg, var(--agent2) 10%, var(--agent) 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
 .mf-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 12px;
 }
-
-@media (max-width: 700px) {
-  .mf-stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  /* The handle already opens the profile: the icon column only costs room here. */
-  .mf .ac-table th:last-child,
-  .mf .ac-table td:last-child {
-    display: none;
-  }
-}
-
-/* Tables */
 
 .mf-user {
   display: inline-flex;
@@ -346,10 +644,8 @@ a {
 
 .mf-ext:hover {
   background: var(--plate);
-  color: var(--ink);
+  color: var(--agent);
 }
-
-/* Extras */
 
 .mf-chips {
   display: flex;
@@ -371,11 +667,9 @@ a {
 }
 
 .mf-chiplink:hover {
-  border-color: var(--line-strong);
+  border-color: color-mix(in srgb, var(--agent) 50%, var(--line2));
   color: var(--ink);
 }
-
-/* Notes */
 
 .mf-warnings {
   margin: 0;
@@ -387,4 +681,112 @@ a {
   margin: 0;
   color: var(--faint);
   font-size: 13px;
+}
+
+/* Footer */
+
+.mf__foot {
+  border-top: 1px solid var(--line);
+  background: var(--side);
+}
+
+.mf-foot__inner {
+  display: flex;
+  max-width: var(--mf-max);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 24px;
+  margin: 0 auto;
+  padding: 22px var(--mf-pad) 10px;
+}
+
+.mf-foot__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+
+.mf-foot__brand p {
+  margin: 0;
+}
+
+.mf-foot__brand strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.mf-foot__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.mf-foot__links a {
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+
+.mf-foot__links a:hover {
+  color: var(--agent);
+  text-decoration: underline;
+}
+
+.mf-foot__base {
+  display: flex;
+  max-width: var(--mf-max);
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 24px;
+  margin: 0 auto;
+  padding: 0 var(--mf-pad) 22px;
+  color: var(--faint);
+  font-size: 12px;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .mf-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mf-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .mf-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* The handle already opens the profile: the icon column only costs room here. */
+  .mf .ac-table th:last-child,
+  .mf .ac-table td:last-child {
+    display: none;
+  }
+
+  /* A strip wider than the card fades at the edge: there are more tabs that way. */
+  .mf-report .ac-tabs {
+    mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .mf *,
+  .mf *::before,
+  .mf *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.001ms !important;
+  }
 }

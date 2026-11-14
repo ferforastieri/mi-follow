@@ -195,7 +195,12 @@ export function ReportView({ report, onReset }: { report: Report; onReset: () =>
   return (
     <>
       <PageHeader
-        title="Sua audiência"
+        className="mf-report__head"
+        title={
+          <>
+            Sua <span className="mf-accent-text">audiência</span>
+          </>
+        }
         meta={`Analisado em ${new Date(report.generatedAt).toLocaleString("pt-BR")} · ${report.files.length} ${report.files.length === 1 ? "arquivo lido" : "arquivos lidos"}`}
         actions={
           <Button variant="ghost" icon="refresh" onClick={onReset}>
