@@ -118,12 +118,16 @@ Cada push na `main` pode buildar e publicar direto do GitHub. No painel:
    | Campo | Valor |
    | --- | --- |
    | Root directory | `/` |
-   | Build command | `npm ci && npm run build` |
+   | Build command | `npm ci --include=dev && npm run build` |
    | Deploy command | `npx wrangler deploy` |
    | Build variable | `NODE_VERSION=22` |
 
 3. Salve. O `wrangler.jsonc` já leva as bindings (D1, assets, rate limits) e o
    domínio próprio — não há nada para configurar no painel.
+
+Use **`mifollow`** como nome do Worker no assistente: é o nome que está no
+`wrangler.jsonc` e o dono atual do domínio. Um nome diferente criaria outro Worker
+e o deploy falharia ao tentar anexar `mifollow.fer.tec.br`, que já pertence a ele.
 
 O banco precisa existir uma vez, com o schema aplicado:
 
