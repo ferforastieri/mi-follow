@@ -1,0 +1,390 @@
+/* Mi Follow: the kit's tokens, one page, a few app-only pieces. */
+
+:root {
+  /* The kit ships Onest; this app reads in Source Sans 3, as faang's own site does. */
+  --font-sans: "Source Sans 3 Variable", "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --font-display: var(--font-sans);
+  --font-size-adjust: 0.52;
+  --mf-max: 1120px;
+  --mf-pad: clamp(18px, 4vw, 36px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--agent-soft);
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+}
+
+.mf {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+}
+
+/* The bar stays while the page scrolls: the brand takes you back to the start. */
+.mf__bar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky, 1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px var(--mf-pad);
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.mf__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  text-decoration: none;
+}
+
+.mf__mark {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--agent);
+  color: var(--on-agent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.mf__main {
+  display: flex;
+  width: 100%;
+  max-width: var(--mf-max);
+  flex: 1;
+  flex-direction: column;
+  gap: 22px;
+  margin: 0 auto;
+  padding: clamp(18px, 4vw, 40px) var(--mf-pad) 64px;
+}
+
+.mf__foot {
+  display: flex;
+  max-width: var(--mf-max);
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 18px var(--mf-pad) 28px;
+  border-top: 1px solid var(--line);
+  color: var(--faint);
+  font-size: 12.5px;
+}
+
+/* Hero */
+
+.mf-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(10px, 3vw, 28px) 0 4px;
+}
+
+.mf-kicker {
+  margin: 0;
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mf-title {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(38px, 7vw, 62px);
+  font-weight: 640;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+.mf-lead {
+  max-width: 64ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 16.5px;
+  line-height: 1.55;
+}
+
+.mf-lead strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Layout */
+
+.mf-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+/* Two balanced columns of cards: the one on the left starts the task, the one on
+   the right explains it. Under 900px both become a single column. */
+.mf-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.mf-col {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mf-grid--tight {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+@media (max-width: 860px) {
+  .mf-grid,
+  .mf-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.mf-grid .ac-card {
+  min-width: 0;
+}
+
+/* The uploader card stacks its pieces without the kit's own gaps. */
+.mf .ac-upload {
+  margin-top: 4px;
+}
+
+.mf-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+
+.mf-alert-hint {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+
+/* How-to */
+
+.mf-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.mf-steps li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  counter-increment: step;
+}
+
+.mf-steps li::before {
+  content: counter(step);
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--plate);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.mf-steps strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.mf-steps li > span {
+  min-width: 0;
+}
+
+.mf-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.mf-checks li {
+  display: flex;
+  gap: 9px;
+}
+
+.mf-checks li::before {
+  content: "✓";
+  color: var(--ok);
+  font-weight: 700;
+}
+
+/* Stats */
+
+.mf-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 700px) {
+  .mf-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* The handle already opens the profile: the icon column only costs room here. */
+  .mf .ac-table th:last-child,
+  .mf .ac-table td:last-child {
+    display: none;
+  }
+}
+
+/* Tables */
+
+.mf-user {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.mf-user:hover {
+  color: var(--agent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.mf-user__at {
+  color: var(--faint);
+  font-weight: 400;
+}
+
+.mf-date {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* The kit's search field is `width: 100%`; in this table the bar reads better on one line. */
+.ac-dtable__bar .ac-searchfield {
+  flex: 1 1 240px;
+  width: auto;
+}
+
+.mf-ext {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--faint);
+}
+
+.mf-ext:hover {
+  background: var(--plate);
+  color: var(--ink);
+}
+
+/* Extras */
+
+.mf-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mf-chiplink {
+  display: inline-block;
+  padding: 3px 9px;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-full);
+  color: var(--muted);
+  font-size: 12.5px;
+  text-decoration: none;
+}
+
+.mf-chiplink:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+/* Notes */
+
+.mf-warnings {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13.5px;
+}
+
+.mf-note {
+  margin: 0;
+  color: var(--faint);
+  font-size: 13px;
+}

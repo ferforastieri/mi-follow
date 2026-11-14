@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mi Follow — quem realmente te segue</title>
+    <meta
+      name="description"
+      content="Descubra quem não te segue de volta no Instagram a partir do ZIP oficial do seu export. Sem senha, sem scraping e sem unfollow automático."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>
+      // The theme is set before the first paint, as the kit expects: a stored
+      // choice, else the system's.
+      (() => {
+        try {
+          const stored = localStorage.getItem("mifollow:theme");
+          const dark = stored ? stored === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.dataset.theme = dark ? "dark" : "light";
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
