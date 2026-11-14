@@ -178,7 +178,23 @@ function ExtraGroup({ title, icon, people }: { title: string; icon: "block" | "s
   );
 }
 
-export function ReportView({ report, onReset }: { report: Report; onReset: () => void }) {
+export function ReportView({
+  report,
+  onReset,
+  onSave,
+  onHistory,
+  saveState,
+  saveError,
+  signedIn,
+}: {
+  report: Report;
+  onReset: () => void;
+  onSave: () => void;
+  onHistory: () => void;
+  saveState: "idle" | "saving" | "saved";
+  saveError: { message: string; hint?: string } | null;
+  signedIn: boolean;
+}) {
   const [tab, setTab] = useState<TabKey>("not-following");
   const { counts, extras } = report;
 
@@ -203,11 +219,32 @@ export function ReportView({ report, onReset }: { report: Report; onReset: () =>
         }
         meta={`Analisado em ${new Date(report.generatedAt).toLocaleString("pt-BR")} · ${report.files.length} ${report.files.length === 1 ? "arquivo lido" : "arquivos lidos"}`}
         actions={
-          <Button variant="ghost" icon="refresh" onClick={onReset}>
-            Outro ZIP
-          </Button>
+          <>
+            <Button variant="ghost" icon="clock" onClick={onHistory}>
+              Histórico
+            </Button>
+            <Button
+              variant="primary"
+              icon={saveState === "saved" ? "check" : "archive"}
+              loading={saveState === "saving"}
+              disabled={saveState === "saved"}
+              onClick={onSave}
+            >
+              {saveState === "saved" ? "Análise salva" : signedIn ? "Salvar análise" : "Criar conta e salvar"}
+            </Button>
+            <Button variant="ghost" icon="refresh" onClick={onReset}>
+              Outro ZIP
+            </Button>
+          </>
         }
       />
+
+      {saveError ? (
+        <Alert tone="danger">
+          <strong>{saveError.message}</strong>
+          {saveError.hint ? <span className="mf-alert-hint">{saveError.hint}</span> : null}
+        </Alert>
+      ) : null}
 
       <div className="mf-stats">
         <StatCard label="Seguidores" value={counts.followers.toLocaleString("pt-BR")} icon="person" footer="contas que te seguem hoje" />

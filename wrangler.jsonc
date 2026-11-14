@@ -15,12 +15,26 @@
     "binding": "ASSETS",
     "run_worker_first": true
   },
+  // Contas e análises guardadas (só quando a pessoa escolhe salvar).
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mi-follow",
+      "database_id": "32fd0a02-1697-4d08-a477-9a9113f9be71"
+    }
+  ],
   // Teto por IP: cada visita ganha um orçamento de análises por minuto.
   "ratelimits": [
     {
       "name": "ANALYZE_LIMIT",
       "namespace_id": "2001",
       "simple": { "limit": 20, "period": 60 }
+    },
+    // Login e cadastro: bem menos, para senha errada não virar força bruta.
+    {
+      "name": "AUTH_LIMIT",
+      "namespace_id": "2002",
+      "simple": { "limit": 12, "period": 60 }
     }
   ],
   "observability": { "enabled": true }

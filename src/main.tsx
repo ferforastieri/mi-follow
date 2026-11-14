@@ -14,3 +14,12 @@ createRoot(root).render(
     <App />
   </StrictMode>,
 );
+
+// The app works offline once installed: the shell is cached, the API never is.
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {
+      // Without the cache the site still works; it just needs the network.
+    });
+  });
+}

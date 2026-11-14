@@ -23,11 +23,45 @@ usuário. O caminho é o export que o próprio Instagram entrega:
 | --- | --- |
 | UI | React 19 + [faang-ui](https://www.npmjs.com/package/faang-ui) |
 | Build | Vite (site estático em `dist/`) |
-| Backend | um Worker: `/api/analyze` + assets estáticos |
+| Backend | um Worker: análise, contas e assets estáticos |
+| Dados | Cloudflare D1 (só o que a pessoa manda salvar) |
 | Deploy | `wrangler deploy` (Workers, sem Pages) |
 
+Publicado em **https://mifollow.fer.tec.br**, com `workers_dev: false` — o Worker
+não responde em `<worker>.workers.dev`, só no domínio próprio.
+
 O Worker descompacta o ZIP em memória com `fflate`, cruza as listas e devolve o
-relatório. Nada é gravado: o corpo da requisição morre com ela.
+relatório. Sem conta, nada é gravado: o corpo da requisição morre com ela.
+
+## Guardar e comparar períodos
+
+Depois da primeira análise, **Salvar análise** abre a criação de conta — e-mail e
+senha, sem Instagram e sem confirmação por e-mail. Com conta, cada análise pode
+ser guardada e o histórico compara duas datas:
+
+- quem **passou a te seguir** e quem **deixou de te seguir**
+- quem **você passou a seguir** e quem **você deixou de seguir**
+- a variação das contagens
+
+O que fica no banco é só a análise que você mandar salvar: `@`, link e data de
+cada perfil, nunca o ZIP. Limite de 24 análises por conta, e **Apagar conta**
+remove tudo na hora.
+
+| Peça | Como |
+| --- | --- |
+| Senha | PBKDF2-SHA256, 100 mil iterações (teto do Workers), sal por conta |
+| Sessão | token opaco de 32 bytes; o banco guarda só o SHA-256, em cookie `HttpOnly` `SameSite=Lax` por 30 dias |
+| CSRF | `Origin` conferido em todo `POST`/`DELETE` |
+| Força bruta | 12 tentativas por minuto por IP (`AUTH_LIMIT`) |
+| Isolamento | toda consulta de análise filtra por `user_id` |
+
+## PWA
+
+O site instala: `manifest.webmanifest` (ícones 192/512 + maskable), service worker
+e `theme-color` por tema. O service worker guarda o **shell** (página e assets com
+hash) e nunca intercepta `/api/` — análise, login e histórico sempre vêm da rede.
+Offline, a última análise já carregada continua na tela; o que depende de rede
+(analisar outro ZIP, entrar, comparar) espera a conexão voltar.
 
 ## Rodando
 
@@ -54,6 +88,29 @@ npm run deploy     # build + wrangler deploy
 - `422` — ZIP válido, mas sem os arquivos esperados (com `hint` explicando)
 - `429` — 20 análises por minuto por IP
 
+Conta e histórico (cookie de sessão; `401` sem ele):
+
+| Rota | O que faz |
+| --- | --- |
+| `POST /api/auth/register` | `{ email, password }` → cria conta e sessão |
+| `POST /api/auth/login` | `{ email, password }` → sessão |
+| `POST /api/auth/logout` | encerra a sessão |
+| `GET /api/auth/me` | `{ user }` ou `{ user: null }` |
+| `DELETE /api/auth/account` | apaga conta, sessões e análises |
+| `GET /api/snapshots` | lista as análises salvas (sem as listas) |
+| `POST /api/snapshots` | `{ report }` → guarda uma análise |
+| `DELETE /api/snapshots/:id` | apaga uma análise |
+| `GET /api/snapshots/compare?from=&to=` | diferença entre duas análises |
+
+## Banco
+
+O schema está em `db/schema.sql`. Para criar e aplicar:
+
+```bash
+npx wrangler d1 create mi-follow        # o database_id vai para o wrangler.jsonc
+npx wrangler d1 execute mi-follow --remote --file db/schema.sql
+```
+
 ## Arquivos que o parser entende
 
 Por nome de base, em qualquer pasta do ZIP:
@@ -76,3 +133,5 @@ array quanto o objeto com `relationships_*`.
   podem não fechar com as contagens.
 - O export é um retrato: quem deixou de seguir depois do download continua na lista.
 - O Instagram leva até 48h para liberar o download.
+- A conta guarda dados de terceiros (os `@` das suas listas) enquanto você quiser:
+  apague a análise ou a conta quando não precisar mais.

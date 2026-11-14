@@ -42,3 +42,36 @@ export interface ApiError {
   error: string;
   hint?: string;
 }
+
+/* ---------- accounts and saved analyses ---------- */
+
+export interface PublicUser {
+  id: string;
+  email: string;
+  createdAt: string;
+}
+
+export interface SnapshotCounts {
+  followers: number;
+  following: number;
+  notFollowingBack: number;
+  youDontFollowBack: number;
+  mutuals: number;
+}
+
+/** A saved analysis, without its lists: what the history lists. */
+export interface SnapshotMeta {
+  id: string;
+  createdAt: string;
+  counts: SnapshotCounts;
+}
+
+/** Two analyses, older to newer. */
+export interface SnapshotDiff {
+  from: SnapshotMeta;
+  to: SnapshotMeta;
+  newFollowers: Person[];
+  lostFollowers: Person[];
+  newFollowing: Person[];
+  unfollowed: Person[];
+}

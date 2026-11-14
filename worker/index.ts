@@ -1,28 +1,7 @@
+import { handleAuth, handleSnapshots } from "./account";
+import type { Env } from "./env";
+import { crossOrigin, fail, json } from "./http";
 import { ExportError, MAX_UPLOAD_BYTES, parseInstagramExport } from "./instagram";
-import type { ApiError } from "../shared/types";
-
-interface Env {
-  ASSETS: { fetch(request: Request): Promise<Response> };
-  /** Optional so `vite dev` + a bare `wrangler dev` both work without the binding. */
-  ANALYZE_LIMIT?: { limit(options: { key: string }): Promise<{ success: boolean }> };
-}
-
-const NO_STORE = {
-  "cache-control": "no-store",
-  "x-content-type-options": "nosniff",
-} as const;
-
-function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "content-type": "application/json; charset=utf-8", ...NO_STORE },
-  });
-}
-
-function fail(status: number, error: string, hint?: string): Response {
-  const body: ApiError = hint ? { error, hint } : { error };
-  return json(body, status);
-}
 
 function isZip(bytes: Uint8Array): boolean {
   // "PK" — a local file header (03 04), or the end-of-central-directory of an empty zip (05 06).
@@ -73,8 +52,16 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
+    if (url.pathname.startsWith("/api/") && request.method !== "GET" && crossOrigin(request, url)) {
+      return fail(403, "Origem não permitida.");
+    }
+
     if (url.pathname === "/api/analyze") return analyze(request, env);
     if (url.pathname === "/api/health") return json({ ok: true });
+    if (url.pathname.startsWith("/api/auth/")) return handleAuth(request, env, url);
+    if (url.pathname === "/api/snapshots" || url.pathname.startsWith("/api/snapshots/")) {
+      return handleSnapshots(request, env, url);
+    }
     if (url.pathname.startsWith("/api/")) return fail(404, "Rota não encontrada.");
 
     const response = await env.ASSETS.fetch(request);

@@ -84,7 +84,7 @@ export function UploadView({
               <Icon name="shield" size={14} /> Somente leitura
             </li>
             <li>
-              <Icon name="lock" size={14} /> Nada é gravado
+              <Icon name="lock" size={14} /> Só guarda se você pedir
             </li>
             <li>
               <Icon name="archive" size={14} /> O ZIP, não a senha
