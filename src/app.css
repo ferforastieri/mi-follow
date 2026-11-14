@@ -134,6 +134,30 @@ body {
   color: var(--ink);
 }
 
+/* While a view transition snapshots the page, component transitions must not
+   run their own animation on top of it (the theme switch). */
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition: none !important;
+}
+
+/* The theme switch's view transition: the old page stays still under the new
+   one, which is revealed by the injected circular mask. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}
+
 a {
   color: inherit;
 }
@@ -144,23 +168,25 @@ a {
   flex-direction: column;
 }
 
-/* The bar stays while the page scrolls: the brand takes you back to the start. */
-.mf__bar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  height: 58px;
+/* The top: no bar — the logo in the middle of the page, the switch at the end. */
+.mf-top {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 0 var(--mf-pad);
-  border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter: blur(14px) saturate(1.15);
+  gap: 12px;
+  width: 100%;
+  max-width: var(--mf-max);
+  margin: 0 auto;
+  padding: 18px var(--mf-pad) 0;
+}
+
+.mf-top__end {
+  display: flex;
+  justify-self: end;
 }
 
 .mf__brand {
+  justify-self: center;
   border-radius: var(--radius-sm);
   text-decoration: none;
 }
@@ -221,7 +247,7 @@ a {
   flex-direction: column;
   align-items: center;
   gap: clamp(18px, 3vw, 26px);
-  padding: clamp(30px, 6vw, 64px) 0 clamp(6px, 2vw, 14px);
+  padding: clamp(20px, 4.5vw, 46px) 0 clamp(6px, 2vw, 14px);
   text-align: center;
 }
 
@@ -695,57 +721,37 @@ a {
   max-width: var(--mf-max);
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 14px 24px;
+  justify-content: center;
+  gap: 6px 28px;
   margin: 0 auto;
-  padding: 22px var(--mf-pad) 10px;
+  padding: 22px var(--mf-pad) 6px;
 }
 
-.mf-foot__brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.mf-foot__credit {
+  margin: 0;
   color: var(--muted);
   font-size: 13.5px;
 }
 
-.mf-foot__brand p {
-  margin: 0;
-}
-
-.mf-foot__brand strong {
+.mf-foot__credit a {
   color: var(--ink);
   font-weight: 600;
-}
-
-.mf-foot__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.mf-foot__links a {
-  color: var(--muted);
-  font-size: 13px;
   text-decoration: none;
-  text-underline-offset: 3px;
+  border-bottom: 1px solid color-mix(in srgb, var(--agent) 45%, transparent);
+  transition: color var(--dur-fast) var(--out), border-color var(--dur-fast) var(--out);
 }
 
-.mf-foot__links a:hover {
+.mf-foot__credit a:hover {
   color: var(--agent);
-  text-decoration: underline;
+  border-bottom-color: var(--agent);
 }
 
-.mf-foot__base {
-  display: flex;
-  max-width: var(--mf-max);
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 6px 24px;
-  margin: 0 auto;
+.mf-foot__note {
+  margin: 0;
   padding: 0 var(--mf-pad) 22px;
   color: var(--faint);
   font-size: 12px;
+  text-align: center;
 }
 
 /* Responsive */
