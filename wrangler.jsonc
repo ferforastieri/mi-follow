@@ -1,9 +1,14 @@
 {
   // Um Worker só: serve o site estático (`dist`) e a rota que lê o ZIP.
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "mi-follow",
+  "name": "mifollow",
   "main": "worker/index.ts",
   "compatibility_date": "2026-11-10",
+  // Publicado só no domínio próprio; nenhum <worker>.workers.dev.
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "mifollow.fer.tec.br", "custom_domain": true }
+  ],
   // Todo request passa pelo Worker, que decide: /api/* na mão, o resto nos assets.
   "assets": {
     "directory": "./dist",
@@ -18,6 +23,5 @@
       "simple": { "limit": 20, "period": 60 }
     }
   ],
-  "observability": { "enabled": true },
-  "workers_dev": true
+  "observability": { "enabled": true }
 }
