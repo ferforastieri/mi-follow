@@ -27,4 +27,5 @@ export interface Env {
   /** Optional so `vite dev` against a bare `wrangler dev` still boots. */
   ANALYZE_LIMIT?: RateLimit;
   AUTH_LIMIT?: RateLimit;
+  API_LIMIT?: RateLimit;
 }

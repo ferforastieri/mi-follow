@@ -35,6 +35,12 @@
       "name": "AUTH_LIMIT",
       "namespace_id": "2002",
       "simple": { "limit": 12, "period": 60 }
+    },
+    // A rede de segurança: nenhuma rota de /api/ passa de 120 por minuto por IP.
+    {
+      "name": "API_LIMIT",
+      "namespace_id": "2003",
+      "simple": { "limit": 120, "period": 60 }
     }
   ],
   "observability": { "enabled": true }

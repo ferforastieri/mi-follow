@@ -5,6 +5,29 @@ import { Spinner } from "faang-ui/components/Skeleton";
 import { Icon } from "faang-ui/icons/Icon";
 import { MAX_UPLOAD_BYTES } from "../lib/api";
 
+const FAQ = [
+  {
+    q: "O Mi Follow pede minha senha do Instagram?",
+    a: "Não. A análise usa o arquivo ZIP que o próprio Instagram entrega. O site nunca vê sua senha nem sua sessão.",
+  },
+  {
+    q: "O Mi Follow deixa de seguir alguém automaticamente?",
+    a: "Não. É só leitura: o site mostra as listas, com o link de cada perfil, e você decide o que fazer.",
+  },
+  {
+    q: "Como pego o ZIP do Instagram?",
+    a: "Em Conta, Suas atividades, Baixar suas informações, marque só “Seguidores e seguindo” no formato JSON. O Instagram avisa por e-mail quando o download fica pronto, em até 48 horas.",
+  },
+  {
+    q: "O que acontece com o meu ZIP?",
+    a: "Ele é lido em memória para gerar o relatório e descartado na mesma requisição. Nada do arquivo é gravado.",
+  },
+  {
+    q: "Para que serve a conta?",
+    a: "Para guardar uma análise e comparar com outra depois, vendo quem passou a te seguir e quem deixou de seguir. É opcional e usa só e-mail e senha.",
+  },
+];
+
 const STEPS = [
   {
     title: "Peça o download",
@@ -135,6 +158,20 @@ export function UploadView({
           </CardFooter>
         </Card>
       </div>
+
+      <section className="mf-section" aria-labelledby="mf-faq-title">
+        <h2 className="mf-h2" id="mf-faq-title">
+          Perguntas frequentes
+        </h2>
+        <div className="mf-faq">
+          {FAQ.map((item) => (
+            <details className="mf-faq__item" key={item.q}>
+              <summary className="mf-faq__q">{item.q}</summary>
+              <p className="mf-faq__a">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
     </>
   );
 }

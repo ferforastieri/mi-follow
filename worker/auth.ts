@@ -13,6 +13,9 @@ import type { Env } from "./env";
 export const PASSWORD_ITERATIONS = 100_000;
 const SESSION_SECONDS = 60 * 60 * 24 * 30;
 const COOKIE = "mf_session";
+/** Over https the cookie takes the `__Host-` prefix: the browser then refuses a
+ * same-named cookie set for a parent domain or another path. */
+const SECURE_COOKIE = "__Host-mf_session";
 
 const encoder = new TextEncoder();
 
@@ -84,12 +87,14 @@ export async function burnPasswordCheck(password: string): Promise<void> {
 }
 
 export function sessionCookie(token: string, secure: boolean): string {
-  const base = `${COOKIE}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${SESSION_SECONDS}`;
+  const name = secure ? SECURE_COOKIE : COOKIE;
+  const base = `${name}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${SESSION_SECONDS}`;
   return secure ? `${base}; Secure` : base;
 }
 
 export function clearCookie(secure: boolean): string {
-  const base = `${COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
+  const name = secure ? SECURE_COOKIE : COOKIE;
+  const base = `${name}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
   return secure ? `${base}; Secure` : base;
 }
 
@@ -98,7 +103,7 @@ export function readSessionToken(request: Request): string | null {
   if (!header) return null;
   for (const part of header.split(";")) {
     const [name, ...rest] = part.trim().split("=");
-    if (name === COOKIE) return rest.join("=") || null;
+    if (name === COOKIE || name === SECURE_COOKIE) return rest.join("=") || null;
   }
   return null;
 }

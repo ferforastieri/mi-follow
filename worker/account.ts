@@ -298,6 +298,11 @@ async function handleSnapshots(request: Request, env: Env, url: URL): Promise<Re
   }
 
   if (url.pathname === "/api/snapshots" && request.method === "POST") {
+    // A single analysis is ~a few hundred KB; anything near this is not one.
+    const declared = Number(request.headers.get("content-length") ?? "0");
+    if (declared > MAX_PAYLOAD + 500_000) {
+      return fail(413, "Análise grande demais para guardar.", "Export com muitos milhares de perfis não cabe.");
+    }
     const body = await readJson<{ report?: unknown }>(request);
     const report = sanitizeReport(body?.report);
     if (!report) return fail(422, "Análise inválida.");

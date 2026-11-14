@@ -3,42 +3,155 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mi Follow — quem realmente te segue</title>
+
+    <title>Mi Follow — quem não te segue de volta no Instagram</title>
     <meta
       name="description"
-      content="Descubra quem não te segue de volta no Instagram a partir do ZIP oficial do seu export. Sem senha, sem scraping e sem unfollow automático."
+      content="Veja quem não te segue de volta no Instagram a partir do ZIP oficial do seu export: listas com link, contagens e comparação de períodos. Sem senha e sem unfollow automático."
     />
+    <link rel="canonical" href="https://mifollow.fer.tec.br/" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="author" content="Fernando Forastieri" />
+    <meta name="application-name" content="Mi Follow" />
+
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fbf6f4" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#150f13" />
-    <meta property="og:title" content="Mi Follow — quem realmente te segue" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mi Follow" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:url" content="https://mifollow.fer.tec.br/" />
+    <meta property="og:title" content="Quem realmente te segue no Instagram" />
     <meta
       property="og:description"
-      content="Suba o ZIP do export do Instagram e veja quem não te segue de volta, quem você não segue e os mútuos. Sem senha, sem unfollow automático."
+      content="Suba o ZIP oficial do Instagram e veja quem não te segue de volta, quem você não segue e os mútuos — com link, contagens e histórico. Sem senha e sem unfollow automático."
     />
-    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://mifollow.fer.tec.br/og.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mi Follow — um coração em pixel sobre a frase “Quem realmente te segue”" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Quem realmente te segue no Instagram" />
+    <meta
+      name="twitter:description"
+      content="Suba o ZIP oficial do Instagram e veja quem não te segue de volta, quem você não segue e os mútuos. Sem senha e sem unfollow automático."
+    />
+    <meta name="twitter:image" content="https://mifollow.fer.tec.br/og.png" />
+
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="mi follow" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <script>
-      // The theme is set before the first paint, as the kit expects: a stored
-      // choice, else the system's.
-      (() => {
-        try {
-          const stored = localStorage.getItem("mifollow:theme");
-          const dark = stored ? stored === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-          document.documentElement.dataset.theme = dark ? "dark" : "light";
-        } catch {
-          document.documentElement.dataset.theme = "light";
-        }
-      })();
+
+    <!-- The theme is set before the first paint: a stored choice, else the system's. -->
+    <script src="/theme.js"></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://mifollow.fer.tec.br/#website",
+            "url": "https://mifollow.fer.tec.br/",
+            "name": "Mi Follow",
+            "alternateName": "mifollow",
+            "description": "Descubra quem não te segue de volta no Instagram com o ZIP oficial do seu export.",
+            "inLanguage": "pt-BR"
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://mifollow.fer.tec.br/#app",
+            "name": "Mi Follow",
+            "url": "https://mifollow.fer.tec.br/",
+            "applicationCategory": "SocialNetworkingApplication",
+            "operatingSystem": "Web",
+            "browserRequirements": "Precisa de JavaScript",
+            "inLanguage": "pt-BR",
+            "isAccessibleForFree": true,
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" },
+            "description": "Análise do export oficial do Instagram: quem não te segue de volta, quem você não segue, mútuos, histórico e comparação de períodos.",
+            "screenshot": "https://mifollow.fer.tec.br/og.png",
+            "creator": {
+              "@type": "Person",
+              "name": "Fernando Forastieri",
+              "url": "https://github.com/ferforastieri"
+            },
+            "isPartOf": { "@id": "https://mifollow.fer.tec.br/#website" }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://mifollow.fer.tec.br/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "O Mi Follow pede minha senha do Instagram?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Não. A análise usa o arquivo ZIP que o próprio Instagram entrega. O site nunca vê sua senha nem sua sessão."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "O Mi Follow deixa de seguir alguém automaticamente?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Não. É só leitura: o site mostra as listas, com o link de cada perfil, e você decide o que fazer."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Como pego o ZIP do Instagram?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Em Conta, Suas atividades, Baixar suas informações, marque só “Seguidores e seguindo” no formato JSON. O Instagram avisa por e-mail quando o download fica pronto, em até 48 horas."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "O que acontece com o meu ZIP?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Ele é lido em memória para gerar o relatório e descartado na mesma requisição. Nada do arquivo é gravado."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Para que serve a conta?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Para guardar uma análise e comparar com outra depois, vendo quem passou a te seguir e quem deixou de seguir. É opcional e usa só e-mail e senha."
+                }
+              }
+            ]
+          }
+        ]
+      }
     </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="max-width: 720px; margin: 48px auto; padding: 0 24px; font-family: system-ui, sans-serif; line-height: 1.55">
+        <h1>Mi Follow — quem realmente te segue no Instagram</h1>
+        <p>
+          O Mi Follow lê o ZIP do export oficial do Instagram e mostra quem não te segue de volta, quem te segue e você
+          não segue, e os mútuos — com o link de cada perfil.
+        </p>
+        <p>
+          É somente leitura: o site não segue, não deixa de seguir e não pede sua senha do Instagram. A análise é
+          gratuita e o arquivo é descartado depois da leitura.
+        </p>
+        <p>Ative o JavaScript para usar a análise em <a href="https://mifollow.fer.tec.br/">mifollow.fer.tec.br</a>.</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,6 +1,7 @@
 import { handleAuth, handleSnapshots } from "./account";
 import type { Env } from "./env";
-import { crossOrigin, fail, json } from "./http";
+import { harden } from "./headers";
+import { crossOrigin, fail, json, requestIp } from "./http";
 import { ExportError, MAX_UPLOAD_BYTES, parseInstagramExport } from "./instagram";
 
 function isZip(bytes: Uint8Array): boolean {
@@ -25,7 +26,7 @@ async function analyze(request: Request, env: Env): Promise<Response> {
     );
   }
 
-  const ip = request.headers.get("cf-connecting-ip") ?? "local";
+  const ip = requestIp(request);
   if (env.ANALYZE_LIMIT) {
     const { success } = await env.ANALYZE_LIMIT.limit({ key: ip });
     if (!success) return fail(429, "Muitos envios em pouco tempo.", "Espere um minuto e tente de novo.");
@@ -48,31 +49,41 @@ async function analyze(request: Request, env: Env): Promise<Response> {
   }
 }
 
+async function route(request: Request, env: Env, url: URL): Promise<Response> {
+  // A blanket budget per IP, before any handler sees the request.
+  if (url.pathname.startsWith("/api/") && env.API_LIMIT) {
+    const { success } = await env.API_LIMIT.limit({ key: requestIp(request) });
+    if (!success) return fail(429, "Muitas requisições.", "Espere um minuto e tente de novo.");
+  }
+
+  if (url.pathname.startsWith("/api/") && request.method !== "GET" && crossOrigin(request, url)) {
+    return fail(403, "Origem não permitida.");
+  }
+
+  if (url.pathname === "/api/analyze") return analyze(request, env);
+  if (url.pathname === "/api/health") return json({ ok: true });
+  if (url.pathname.startsWith("/api/auth/")) return handleAuth(request, env, url);
+  if (url.pathname === "/api/snapshots" || url.pathname.startsWith("/api/snapshots/")) {
+    return handleSnapshots(request, env, url);
+  }
+  if (url.pathname.startsWith("/api/")) return fail(404, "Rota não encontrada.");
+
+  // Long-lived cache for the hashed assets; the HTML always revalidates.
+  const response = await env.ASSETS.fetch(request);
+  // The SPA owns every non-asset path; a refresh on one still gets the app.
+  if (
+    response.status === 404 &&
+    request.method === "GET" &&
+    (request.headers.get("accept") ?? "").includes("text/html")
+  ) {
+    return env.ASSETS.fetch(new Request(new URL("/index.html", url).toString(), { headers: request.headers }));
+  }
+  return response;
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
-
-    if (url.pathname.startsWith("/api/") && request.method !== "GET" && crossOrigin(request, url)) {
-      return fail(403, "Origem não permitida.");
-    }
-
-    if (url.pathname === "/api/analyze") return analyze(request, env);
-    if (url.pathname === "/api/health") return json({ ok: true });
-    if (url.pathname.startsWith("/api/auth/")) return handleAuth(request, env, url);
-    if (url.pathname === "/api/snapshots" || url.pathname.startsWith("/api/snapshots/")) {
-      return handleSnapshots(request, env, url);
-    }
-    if (url.pathname.startsWith("/api/")) return fail(404, "Rota não encontrada.");
-
-    const response = await env.ASSETS.fetch(request);
-    // The SPA owns every non-asset path; a refresh on one still gets the app.
-    if (
-      response.status === 404 &&
-      request.method === "GET" &&
-      (request.headers.get("accept") ?? "").includes("text/html")
-    ) {
-      return env.ASSETS.fetch(new Request(new URL("/index.html", url).toString(), { headers: request.headers }));
-    }
-    return response;
+    return harden(await route(request, env, url), url.protocol === "https:");
   },
 };
