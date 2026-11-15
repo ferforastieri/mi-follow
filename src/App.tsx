@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { UploadFile } from "faang-ui/components/FileUpload";
 import { Button } from "faang-ui/components/Button";
+import { Avatar } from "faang-ui/components/Avatar";
 import type { PublicUser, Report } from "../shared/types";
 import { AnalyzeError, analyzeZip } from "./lib/api";
 import { AccountError, getMe, saveSnapshot } from "./lib/account";
@@ -10,7 +11,7 @@ import { ReportView } from "./components/ReportView";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { UploadView } from "./components/UploadView";
 import { Logo } from "./components/Logo";
-import { GithubIcon, HistoryIcon, InstagramIcon } from "./components/icons";
+import { GithubIcon, InstagramIcon } from "./components/icons";
 
 interface Failure {
   message: string;
@@ -160,11 +161,11 @@ export function App() {
               variant="ghost"
               size="sm"
               iconOnly
-              aria-label="Histórico"
+              aria-label="Abrir seu histórico"
               title="Histórico"
               onClick={openHistory}
             >
-              <HistoryIcon />
+              <Avatar name={user.email} initials={user.email.slice(0, 1).toUpperCase()} size="sm" />
             </Button>
           ) : null}
           <ThemeToggle />
