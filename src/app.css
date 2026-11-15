@@ -398,9 +398,11 @@ a {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  border: 1.5px dashed var(--line2);
+  border: 1.5px dashed color-mix(in srgb, var(--agent) 42%, var(--line2));
   border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--agent-soft) 45%, var(--raised));
+  /* Opaque on purpose: `--agent-soft` is translucent in the dark theme, and the
+     zone would read as a bare outline with no surface to drop onto. */
+  background: color-mix(in srgb, var(--agent) 12%, var(--raised-2));
   transition:
     border-color var(--dur-fast) var(--out),
     background-color var(--dur-fast) var(--out),
@@ -408,13 +410,13 @@ a {
 }
 
 .mf-dock .ac-upload__zone:hover {
-  border-color: color-mix(in srgb, var(--agent) 55%, var(--line2));
-  background: color-mix(in srgb, var(--agent-soft) 75%, var(--raised));
+  border-color: color-mix(in srgb, var(--agent) 60%, var(--line2));
+  background: color-mix(in srgb, var(--agent) 18%, var(--raised-2));
 }
 
 .mf-dock .ac-upload__zone--over {
   border-color: var(--agent);
-  background: var(--agent-soft);
+  background: color-mix(in srgb, var(--agent) 24%, var(--raised-2));
   transform: scale(1.006);
 }
 
