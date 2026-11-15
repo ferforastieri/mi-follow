@@ -69,6 +69,7 @@ export function AuthDialog({
       }
       closeLabel="Fechar"
       width={440}
+      className="mf-auth"
     >
       <form onSubmit={submit} noValidate>
         <DialogBody>

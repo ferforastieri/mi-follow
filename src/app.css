@@ -1027,3 +1027,77 @@ a {
   font-size: 13px;
   word-break: break-all;
 }
+
+/*
+ * On a phone the account dialog is a card in the middle, not a sheet glued to
+ * the bottom: it is a short form, and the footer's note and button share a line.
+ */
+@media (max-width: 640px) {
+  .mf-auth.ac-dialog {
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    width: calc(100% - 28px);
+    max-width: 420px;
+    max-height: calc(100dvh - 40px);
+    transform: translate(-50%, -50%);
+    border-radius: var(--radius-lg);
+    padding-bottom: 0;
+  }
+
+  .mf-auth.ac-dialog[data-state="open"] {
+    animation-name: ac-fade-in;
+  }
+
+  .mf-auth.ac-dialog[data-state="closed"] {
+    animation-name: ac-fade-out;
+  }
+
+  .mf-auth .ac-dialog__foot .ac-dialog__foot-acts {
+    flex: 0 0 auto;
+  }
+
+  .mf-auth .ac-dialog__foot .ac-dialog__foot-acts > .ac-btn {
+    flex: 0 0 auto;
+    width: auto;
+  }
+}
+
+/* The report's three actions keep the header's rhythm on wide screens. */
+.mf-report__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/*
+ * Report actions on a phone: the two quiet ones share the first line and the
+ * main one takes the second, instead of a lone button centred under the others.
+ */
+@media (max-width: 640px) {
+  .mf-report__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .mf-report__actions > .ac-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .mf-report__actions > :nth-child(1) {
+    grid-area: 1 / 1;
+  }
+
+  .mf-report__actions > :nth-child(2) {
+    grid-area: 2 / 1 / 3 / 3;
+  }
+
+  .mf-report__actions > :nth-child(3) {
+    grid-area: 1 / 2;
+  }
+}

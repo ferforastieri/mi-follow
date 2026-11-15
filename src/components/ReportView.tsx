@@ -220,7 +220,7 @@ export function ReportView({
         }
         meta={`Analisado em ${new Date(report.generatedAt).toLocaleString("pt-BR")} · ${report.files.length} ${report.files.length === 1 ? "arquivo lido" : "arquivos lidos"}`}
         actions={
-          <>
+          <div className="mf-report__actions">
             <Button variant="ghost" onClick={onHistory}>
               <span className="mf-withicon">
                 <HistoryIcon size={17} /> Histórico
@@ -238,7 +238,7 @@ export function ReportView({
             <Button variant="ghost" icon="refresh" onClick={onReset}>
               Outro ZIP
             </Button>
-          </>
+          </div>
         }
       />
 
