@@ -145,7 +145,7 @@ function Moon() {
 
 /**
  * The theme is one attribute on `<html>` (`data-theme`), read by every token in
- * the kit. A press reveals the new palette from the click as a soft circle — the
+ * the kit. A press reveals the new palette from the click as a soft circle - the
  * whole page lights up or goes dark, not just the glyph.
  */
 export function ThemeToggle() {

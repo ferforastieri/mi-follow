@@ -169,7 +169,7 @@ export function parseInstagramExport(bytes: Uint8Array): Report {
   if (budget > MAX_UNCOMPRESSED_BYTES || total > MAX_UNCOMPRESSED_BYTES) {
     throw new ExportError(
       "Esse export é grande demais para ler aqui.",
-      "Refaça o download marcando só “Seguidores e seguindo” — sem fotos, vídeos nem outras categorias.",
+      "Refaça o download marcando só “Seguidores e seguindo” - sem fotos, vídeos nem outras categorias.",
     );
   }
 

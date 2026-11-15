@@ -45,6 +45,11 @@ export const logout = () => call<{ ok: true }>("/api/auth/logout", { method: "PO
 
 export const deleteAccount = () => call<{ ok: true }>("/api/auth/account", { method: "DELETE" });
 
+export const getSnapshot = (id: string) =>
+  call<{ snapshot: SnapshotMeta; report: Report }>(`/api/snapshots/${encodeURIComponent(id)}`).then(
+    (result) => result.report,
+  );
+
 export const listSnapshots = () =>
   call<{ snapshots: SnapshotMeta[] }>("/api/snapshots").then((result) => result.snapshots);
 

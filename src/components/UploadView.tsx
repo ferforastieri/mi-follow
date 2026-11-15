@@ -151,7 +151,7 @@ export function UploadView({
           <CardHeader icon="lock" title="Por que não pedimos sua senha" />
           <p className="mf-prose">
             O Instagram não expõe a lista de seguidores por API. Login automatizado quebraria os termos e exigiria
-            guardar sua sessão. O export oficial é seu, foi feito para isso — e o Mi Follow só lê.
+            guardar sua sessão. O export oficial é seu, foi feito para isso - e o Mi Follow só lê.
           </p>
           <CardFooter>
             Quem deixou de seguir depois do seu export continua na lista: o ZIP é um retrato, não um feed.

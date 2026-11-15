@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Person, PublicUser, SnapshotDiff, SnapshotMeta } from "../../shared/types";
+import type { Person, PublicUser, Report, SnapshotDiff, SnapshotMeta } from "../../shared/types";
 import { Button } from "faang-ui/components/Button";
 import { Dialog, DialogBody, DialogFooter } from "faang-ui/components/Dialog";
 import { Alert, Card, CardHeader, EmptyState } from "faang-ui/components/Surfaces";
@@ -7,11 +7,13 @@ import { PageHeader } from "faang-ui/components/PageHeader";
 import { Table, type TableColumn } from "faang-ui/components/Table";
 import { SkeletonList } from "faang-ui/components/Skeleton";
 import { Checkbox } from "faang-ui/components/Checkbox";
+import { Avatar } from "faang-ui/components/Avatar";
 import {
   AccountError,
   compareSnapshots,
   deleteAccount,
   deleteSnapshot,
+  getSnapshot,
   listSnapshots,
   logout,
 } from "../lib/account";
@@ -19,7 +21,7 @@ import { formatDate } from "../lib/format";
 
 function dateTime(iso: string): string {
   const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return "—";
+  if (Number.isNaN(date.getTime())) return "-";
   return date.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
@@ -50,10 +52,13 @@ export function HistoryView({
   user,
   onBack,
   onLogout,
+  onOpen,
 }: {
   user: PublicUser;
   onBack: () => void;
   onLogout: () => void;
+  /** Opens a saved analysis in the report screen. */
+  onOpen: (report: Report) => void;
 }) {
   const [snapshots, setSnapshots] = useState<SnapshotMeta[] | null>(null);
   const [error, setError] = useState<{ message: string; hint?: string } | null>(null);
@@ -62,6 +67,7 @@ export function HistoryView({
   const [comparing, setComparing] = useState(false);
   const [confirmAccount, setConfirmAccount] = useState(false);
   const [deletingAccount, setDeletingAccount] = useState(false);
+  const [openingId, setOpeningId] = useState<string | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -96,6 +102,7 @@ export function HistoryView({
         align: "end",
         sortable: true,
         value: (row) => row.counts.followers,
+        render: (row) => row.counts.followers.toLocaleString("pt-BR"),
       },
       {
         key: "following",
@@ -103,6 +110,7 @@ export function HistoryView({
         align: "end",
         sortable: true,
         value: (row) => row.counts.following,
+        render: (row) => row.counts.following.toLocaleString("pt-BR"),
       },
       {
         key: "notFollowingBack",
@@ -110,38 +118,68 @@ export function HistoryView({
         align: "end",
         sortable: true,
         value: (row) => row.counts.notFollowingBack,
+        render: (row) => row.counts.notFollowingBack.toLocaleString("pt-BR"),
       },
       {
         key: "actions",
         title: "",
         align: "end",
         render: (row) => (
-          <Button
-            variant="ghost"
-            size="sm"
-            icon="trash"
-            iconOnly
-            aria-label={`Apagar a análise de ${dateTime(row.createdAt)}`}
-            onClick={async () => {
-              try {
-                await deleteSnapshot(row.id);
-                setSnapshots((list) => (list ?? []).filter((item) => item.id !== row.id));
-                setSelected((keys) => keys.filter((key) => key !== row.id));
-                setDiff(null);
-              } catch (thrown) {
-                setError(
-                  thrown instanceof AccountError
-                    ? { message: thrown.message, hint: thrown.hint }
-                    : { message: "Não consegui apagar." },
-                );
-              }
-            }}
-          />
+          <span className="mf-rowactions">
+            <Button
+              variant="ghost"
+              size="sm"
+              icon="eye"
+              iconOnly
+              aria-label={`Abrir a análise de ${dateTime(row.createdAt)}`}
+              loading={openingId === row.id}
+              onClick={() => open(row)}
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              icon="trash"
+              iconOnly
+              aria-label={`Apagar a análise de ${dateTime(row.createdAt)}`}
+              onClick={() => remove(row)}
+            />
+          </span>
         ),
       },
     ],
     [],
   );
+
+  async function open(row: SnapshotMeta) {
+    setOpeningId(row.id);
+    setError(null);
+    try {
+      onOpen(await getSnapshot(row.id));
+    } catch (thrown) {
+      setError(
+        thrown instanceof AccountError
+          ? { message: thrown.message, hint: thrown.hint }
+          : { message: "Não consegui abrir a análise." },
+      );
+    } finally {
+      setOpeningId(null);
+    }
+  }
+
+  async function remove(row: SnapshotMeta) {
+    try {
+      await deleteSnapshot(row.id);
+      setSnapshots((list) => (list ?? []).filter((item) => item.id !== row.id));
+      setSelected((keys) => keys.filter((key) => key !== row.id));
+      setDiff(null);
+    } catch (thrown) {
+      setError(
+        thrown instanceof AccountError
+          ? { message: thrown.message, hint: thrown.hint }
+          : { message: "Não consegui apagar." },
+      );
+    }
+  }
 
   async function compare() {
     if (!snapshots || selected.length !== 2) return;
@@ -292,27 +330,25 @@ export function HistoryView({
                     te seguem
                   </p>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon="trash"
-                  iconOnly
-                  aria-label={`Apagar a análise de ${dateTime(row.createdAt)}`}
-                  onClick={async () => {
-                    try {
-                      await deleteSnapshot(row.id);
-                      setSnapshots((list) => (list ?? []).filter((item) => item.id !== row.id));
-                      setSelected((keys) => keys.filter((key) => key !== row.id));
-                      setDiff(null);
-                    } catch (thrown) {
-                      setError(
-                        thrown instanceof AccountError
-                          ? { message: thrown.message, hint: thrown.hint }
-                          : { message: "Não consegui apagar." },
-                      );
-                    }
-                  }}
-                />
+                <span className="mf-rowactions">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    icon="eye"
+                    iconOnly
+                    aria-label={`Abrir a análise de ${dateTime(row.createdAt)}`}
+                    loading={openingId === row.id}
+                    onClick={() => open(row)}
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    icon="trash"
+                    iconOnly
+                    aria-label={`Apagar a análise de ${dateTime(row.createdAt)}`}
+                    onClick={() => remove(row)}
+                  />
+                </span>
               </li>
             ))}
           </ul>
@@ -337,23 +373,23 @@ export function HistoryView({
       ) : null}
 
       <Card padded>
-        <CardHeader
-          icon="person"
-          title="Sua conta"
-          subtitle={user.email}
-          action={
-            <span className="mf-actions">
-              <Button variant="ghost" size="sm" icon="power" onClick={logoutSafely}>
-                Sair
-              </Button>
-              <Button variant="ghost" size="sm" icon="trash" onClick={() => setConfirmAccount(true)}>
-                Apagar conta
-              </Button>
-            </span>
-          }
-        />
+        <div className="mf-account">
+          <Avatar name={user.email} initials={user.email.slice(0, 1).toUpperCase()} size="md" labelled />
+          <div className="mf-account__text">
+            <p className="mf-account__title">Sua conta</p>
+            <p className="mf-account__mail">{user.email}</p>
+          </div>
+          <span className="mf-actions">
+            <Button variant="ghost" size="sm" icon="power" onClick={logoutSafely}>
+              Sair
+            </Button>
+            <Button variant="ghost" size="sm" icon="trash" onClick={() => setConfirmAccount(true)}>
+              Apagar conta
+            </Button>
+          </span>
+        </div>
         <p className="mf-prose">
-          O Mi Follow guarda apenas as listas da análise que você mandar salvar — nunca o ZIP. Apagar a conta remove
+          O Mi Follow guarda apenas as listas da análise que você mandar salvar - nunca o ZIP. Apagar a conta remove
           tudo, na hora.
         </p>
       </Card>

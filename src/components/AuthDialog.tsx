@@ -65,7 +65,7 @@ export function AuthDialog({
       title={creating ? "Criar conta" : "Entrar"}
       description={
         reason ??
-        "Uma conta guarda suas análises para comparar os períodos. É só e-mail e senha — nada do Instagram."
+        "Uma conta guarda suas análises para comparar os períodos. É só e-mail e senha - nada do Instagram."
       }
       closeLabel="Fechar"
       width={440}

@@ -1,9 +1,9 @@
 const DATE = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
 
 export function formatDate(iso: string | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const date = new Date(iso);
-  return Number.isNaN(date.getTime()) ? "—" : DATE.format(date);
+  return Number.isNaN(date.getTime()) ? "-" : DATE.format(date);
 }
 
 export function percent(part: number, whole: number): string {

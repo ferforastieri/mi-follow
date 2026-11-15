@@ -3,7 +3,7 @@
 Quem realmente te segue no Instagram.
 
 Você sobe o arquivo que o próprio Instagram entrega e vê, em segundos, quem não te
-segue de volta, quem te segue e você não segue, e os mútuos — cada perfil com link.
+segue de volta, quem te segue e você não segue, e os mútuos - cada perfil com link.
 Somente leitura: o Mi Follow não segue, não deixa de seguir e nunca pede sua senha
 do Instagram.
 
@@ -14,11 +14,11 @@ do Instagram.
 ## O que ele faz
 
 - **Quem não te segue de volta**, com o @ e o link de cada perfil.
-- **Quem te segue e você não segue** — às vezes a surpresa é do outro lado.
+- **Quem te segue e você não segue** - às vezes a surpresa é do outro lado.
 - **Os mútuos** e a proporção de cada lado, para entender o tamanho real da conta.
 - **Busca, cópia e CSV** para levar a lista para onde quiser.
 - **Histórico**: com uma conta, cada análise fica guardada e dá para comparar dois
-  períodos — quem chegou, quem saiu, quem você passou a seguir.
+  períodos - quem chegou, quem saiu, quem você passou a seguir.
 - **Extras** quando vêm no arquivo: bloqueados, melhores amigos, pedidos pendentes.
 
 ![O relatório: contagens no topo, abas de listas e a tabela de perfis com link](docs/report.png)
@@ -28,7 +28,7 @@ do Instagram.
 1. No Instagram, peça o download das suas informações em _Conta → Suas atividades_,
    marcando só **Seguidores e seguindo**, no formato **JSON**.
 2. O Instagram avisa por e-mail quando fica pronto (até 48h). Baixe o ZIP.
-3. Solte o ZIP no site. A análise aparece na hora — e o arquivo é descartado junto
+3. Solte o ZIP no site. A análise aparece na hora - e o arquivo é descartado junto
    com a requisição.
 
 **Por que assim?** O Instagram não oferece a lista de seguidores por API, e entrar
@@ -105,7 +105,7 @@ Um push na `main` faz o Workers Builds compilar e publicar.
 - Deploy: `npx wrangler deploy`
 
 Para publicar da sua máquina, `npm run deploy` faz o mesmo. O `wrangler.jsonc`
-carrega as bindings (banco, assets, limites) e o domínio — não há nada para
+carrega as bindings (banco, assets, limites) e o domínio - não há nada para
 configurar no painel.
 
 ## O que fica guardado
@@ -121,7 +121,7 @@ configurar no painel.
 
 ## Limites conhecidos
 
-- Conta desativada ou com @ trocado não aparece de um dos lados — por isso as listas
+- Conta desativada ou com @ trocado não aparece de um dos lados - por isso as listas
   podem não fechar exatamente com as contagens.
 - O arquivo é um retrato: quem deixou de seguir depois do download continua na lista.
 - O Instagram leva até 48 horas para liberar o download.
@@ -130,5 +130,6 @@ configurar no painel.
 
 ## Créditos
 
-Feito por [Fernando Forastieri](https://github.com/ferforastieri).
-Ideia de [@mihforastieri](https://www.instagram.com/mihforastieri/).
+Feito por <img src="https://cdn.simpleicons.org/github/7d8590" width="15" height="15" alt="GitHub" align="absmiddle" /> [Fernando Forastieri](https://github.com/ferforastieri).
+
+Ideia de <img src="https://cdn.simpleicons.org/instagram/c95b83" width="15" height="15" alt="Instagram" align="absmiddle" /> [@mihforastieri](https://www.instagram.com/mihforastieri/).

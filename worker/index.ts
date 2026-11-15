@@ -5,7 +5,7 @@ import { crossOrigin, fail, json, requestIp } from "./http";
 import { ExportError, MAX_UPLOAD_BYTES, parseInstagramExport } from "./instagram";
 
 function isZip(bytes: Uint8Array): boolean {
-  // "PK" — a local file header (03 04), or the end-of-central-directory of an empty zip (05 06).
+  // "PK" - a local file header (03 04), or the end-of-central-directory of an empty zip (05 06).
   return bytes.length >= 4 && bytes[0] === 0x50 && bytes[1] === 0x4b;
 }
 

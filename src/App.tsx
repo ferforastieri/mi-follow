@@ -10,6 +10,7 @@ import { ReportView } from "./components/ReportView";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { UploadView } from "./components/UploadView";
 import { Logo } from "./components/Logo";
+import { GithubIcon, HistoryIcon, InstagramIcon } from "./components/icons";
 
 interface Failure {
   message: string;
@@ -122,6 +123,15 @@ export function App() {
     if (report && saveState !== "saved") await persist(report);
   }
 
+  function openSnapshot(saved: Report) {
+    setReport(saved);
+    // It came from the history: it is already stored.
+    setSaveState("saved");
+    setSaveError(null);
+    setView("main");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   function onLogout() {
     setUser(null);
     setView("main");
@@ -149,12 +159,13 @@ export function App() {
             <Button
               variant="ghost"
               size="sm"
-              icon="clock"
               iconOnly
               aria-label="Histórico"
               title="Histórico"
               onClick={openHistory}
-            />
+            >
+              <HistoryIcon />
+            </Button>
           ) : null}
           <ThemeToggle />
         </div>
@@ -163,7 +174,12 @@ export function App() {
       <main className="mf__main">
         {view === "history" && user ? (
           <div className="mf-report">
-            <HistoryView user={user} onBack={() => setView("main")} onLogout={onLogout} />
+            <HistoryView
+              user={user}
+              onBack={() => setView("main")}
+              onLogout={onLogout}
+              onOpen={openSnapshot}
+            />
           </div>
         ) : report ? (
           <div className="mf-report">
@@ -187,13 +203,13 @@ export function App() {
           <p className="mf-foot__credit">
             Feito por{" "}
             <a href="https://github.com/ferforastieri" target="_blank" rel="noreferrer">
-              Fernando Forastieri
+              <GithubIcon /> Fernando Forastieri
             </a>
           </p>
           <p className="mf-foot__credit">
             Ideia de{" "}
             <a href="https://www.instagram.com/mihforastieri/" target="_blank" rel="noreferrer">
-              @mihforastieri
+              <InstagramIcon /> @mihforastieri
             </a>
           </p>
         </div>
@@ -207,7 +223,7 @@ export function App() {
         reason={
           authIntent === "history"
             ? "Entre para ver as análises que você guardou e comparar os períodos."
-            : "Crie uma conta para guardar esta análise e comparar com as próximas. É só e-mail e senha — nada do Instagram."
+            : "Crie uma conta para guardar esta análise e comparar com as próximas. É só e-mail e senha - nada do Instagram."
         }
       />
     </div>

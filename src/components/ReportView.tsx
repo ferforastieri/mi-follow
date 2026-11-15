@@ -10,6 +10,7 @@ import { Chip } from "faang-ui/components/Chip";
 import { SearchField } from "faang-ui/components/Toolbar";
 import { Table, type TableColumn } from "faang-ui/components/Table";
 import { Icon } from "faang-ui/icons/Icon";
+import { HistoryIcon } from "./icons";
 import { formatDate, percent, plural } from "../lib/format";
 
 type TabKey = "not-following" | "not-followed" | "mutual" | "extra";
@@ -220,8 +221,10 @@ export function ReportView({
         meta={`Analisado em ${new Date(report.generatedAt).toLocaleString("pt-BR")} · ${report.files.length} ${report.files.length === 1 ? "arquivo lido" : "arquivos lidos"}`}
         actions={
           <>
-            <Button variant="ghost" icon="clock" onClick={onHistory}>
-              Histórico
+            <Button variant="ghost" onClick={onHistory}>
+              <span className="mf-withicon">
+                <HistoryIcon size={17} /> Histórico
+              </span>
             </Button>
             <Button
               variant="primary"
@@ -279,7 +282,7 @@ export function ReportView({
         <CardHeader
           icon="list"
           title="As listas"
-          subtitle="Contas desativadas ou com @ trocado não aparecem de um dos lados — por isso a diferença entre as contagens."
+          subtitle="Contas desativadas ou com @ trocado não aparecem de um dos lados - por isso a diferença entre as contagens."
         />
         <Tabs<TabKey> value={tab} onValueChange={setTab} items={tabs} label="Listas de perfis">
           <TabPanel value="not-following">
